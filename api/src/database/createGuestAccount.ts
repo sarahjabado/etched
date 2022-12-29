@@ -20,16 +20,22 @@ const seedUsers = (): Promise<User[]> => {
       name: 'Lord Gaben',
       avatarUrl: 'https://i.ibb.co/6RJ5hq6/gaben.jpg',
     }),
+    createEntity(User, {
+      email: 'admin@test.com',
+      name: 'Administrator',
+      password: 'password',
+      avatarUrl: 'https://yt3.ggpht.com/a-/AAuE7mAP86V-ieVn3XOIN5wGhlFU0dRVGQFdTAMLOg=s900-mo-c-c0xffffffff-rj-k-no',
+    }),
   ];
   return Promise.all(users);
 };
 
 const seedProject = (users: User[]): Promise<Project> =>
   createEntity(Project, {
-    name: 'singularity 1.0',
-    url: 'https://www.atlassian.com/software/jira',
+    name: 'Example Project',
+    url: '/',
     description:
-      'Plan, track, and manage your agile and software development projects in Jira. Customize your workflow, collaborate, and release great software.',
+      'Plan, track, and manage your agile and software development projects in Etched. Customize your workflow, collaborate, and release great software.',
     category: ProjectCategory.SOFTWARE,
     key: 'SING',
     users,

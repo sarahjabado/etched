@@ -37,6 +37,12 @@ const ProjectNavbarLeft = ({ issueSearchModalOpen, issueCreateModalOpen }) => (
           </Item>
         )}
       />
+      <Item>
+        <a href="/logout">
+          <Icon type="logout" size={27} />
+          <ItemText>Logout</ItemText>
+        </a>
+      </Item>
     </Bottom>
   </NavLeft>
 );

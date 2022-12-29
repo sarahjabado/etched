@@ -5,6 +5,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'CircularStdBold';
   src: url('./assets/fonts/CircularStd-Bold.woff2') format('woff2'),
@@ -12,6 +13,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'CircularStdMedium';
   src: url('./assets/fonts/CircularStd-Medium.woff2') format('woff2'),
@@ -19,6 +21,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'CircularStdBook';
   src: url('./assets/fonts/CircularStd-Book.woff2') format('woff2'),
@@ -26,10 +29,11 @@
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'jira';
-  src: url('./assets/fonts/jira.woff') format('truetype'),
-    url('./assets/fonts/jira.ttf') format('woff'), url('./assets/fonts/jira.svg#jira') format('svg');
+  src: url('./assets/fonts/jira.svg#jira') format('svg'), url('./assets/fonts/jira.woff') format('truetype'),
+    url('./assets/fonts/jira.ttf') format('woff');
   font-weight: normal;
   font-style: normal;
 }

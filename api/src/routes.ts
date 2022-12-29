@@ -11,6 +11,7 @@ export const attachPublicRoutes = (app: any): void => {
     app.post('/test/create-account', test.createAccount);
   }
 
+  app.post('/authentication/login', authentication.doLogin)
   app.post('/authentication/guest', authentication.createGuestAccount);
 };
 

@@ -9,8 +9,11 @@ import {
   ManyToMany,
   ManyToOne,
   RelationId,
+  AfterInsert,
+  BeforeInsert,
 } from 'typeorm';
 
+import Cryptgen from 'utils/cryptgen';
 import is from 'utils/validation';
 import { Comment, Issue, Project } from '.';
 import { InvalidPassword } from 'errors/customErrors';
@@ -67,25 +70,45 @@ class User extends BaseEntity {
   @RelationId((user: User) => user.project)
   projectId: number;
 
+  @BeforeInsert()
+  setSalt(): void {
+    this.salt = Cryptgen.random(32);
+  }
+
+  @AfterInsert()
+  async setUserPasswordOnCreate(): Promise<void> {
+    const pass = this.password || Cryptgen.random(16);
+
+    console.log('Setting user password to', pass);
+
+    this.setPassword(pass);
+  }
+
+  static async isValidLogin(email: string, password: string): Promise<User | null> {
+    return new Promise(async (resolve) => {
+      const returnQuery = await User.createQueryBuilder('user')
+        .select('user.id')
+        .where('user.email = :email and user.password = encode(sha512(concat(:password::text, salt)::bytea), \'hex\')', { email, password })
+        .getOne();
+
+      resolve(!returnQuery ? null : returnQuery); // Valid Login.
+    });
+  }
+
   async setPassword(newPassword: string): Promise<boolean> {
     if (!newPassword) {
       throw new InvalidPassword();
     }
+
     return new Promise(async (resolve) => {
-      await User.createQueryBuilder('user')
-        .update('user.password = sha512(user.salt + ":password")', { password: newPassword })
-        .where('user.id = :userId', { userId: this.id });
+      const val = await User.createQueryBuilder('user')
+        .select('encode(sha512(\'' + newPassword + this.salt + '\'::bytea), \'hex\')')
+        .getRawOne();
 
-      const returnQuery = await User.createQueryBuilder('user')
-        .select('password')
-        .where('user.id = :userId', { userId: this.id })
-        .getOne();
+      console.log('Value of Val', val, 'on', this);
 
-      if (!returnQuery) {
-        throw new InvalidPassword();
-      }
-
-      this.password = returnQuery.password;
+      this.password = val.encode;
+      this.save();
       resolve(true);
     });
   }
