@@ -13,6 +13,7 @@ import {
 
 import is from 'utils/validation';
 import { Comment, Issue, Project } from '.';
+import { InvalidPassword } from 'errors/customErrors';
 
 @Entity()
 class User extends BaseEntity {
@@ -29,6 +30,12 @@ class User extends BaseEntity {
 
   @Column('varchar')
   email: string;
+
+  @Column('varchar', { nullable: true })
+  password: string;
+
+  @Column('varchar', { nullable: true })
+  salt: string;
 
   @Column('varchar', { length: 2000 })
   avatarUrl: string;
@@ -59,6 +66,39 @@ class User extends BaseEntity {
 
   @RelationId((user: User) => user.project)
   projectId: number;
+
+  async setPassword(newPassword: string): Promise<boolean> {
+    if (!newPassword) {
+      throw new InvalidPassword();
+    }
+    return new Promise(async (resolve) => {
+      await User.createQueryBuilder('user')
+        .update('user.password = sha512(user.salt + ":password")', { password: newPassword })
+        .where('user.id = :userId', { userId: this.id });
+
+      const returnQuery = await User.createQueryBuilder('user')
+        .select('password')
+        .where('user.id = :userId', { userId: this.id })
+        .getOne();
+
+      if (!returnQuery) {
+        throw new InvalidPassword();
+      }
+
+      this.password = returnQuery.password;
+      resolve(true);
+    });
+  }
+
+  getSalt(): string {
+    if (this.salt) {
+      return this.salt;
+    }
+    // generate new salt.
+    // this.salt = salt;
+
+    return '';
+  }
 }
 
 export default User;

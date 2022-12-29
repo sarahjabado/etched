@@ -9,7 +9,7 @@ export const getProjectIssues = catchErrors(async (req, res) => {
   let whereSQL = 'issue.projectId = :projectId';
 
   if (searchTerm) {
-    whereSQL += ' AND (issue.title ILIKE :searchTerm OR issue.descriptionText ILIKE :searchTerm)';
+    whereSQL += ' AND (issue.title ILIKE :searchTerm OR issue.descriptionText ILIKE :searchTerm OR issue.key ILIKE :searchTerm)';
   }
 
   const issues = await Issue.createQueryBuilder('issue')
@@ -21,7 +21,15 @@ export const getProjectIssues = catchErrors(async (req, res) => {
 });
 
 export const getIssueWithUsersAndComments = catchErrors(async (req, res) => {
-  const issue = await findEntityOrThrow(Issue, req.params.issueId, {
+  const issues = await Issue.find({ key: req.params.issueKey });
+
+  if (!issues || !issues[0]) {
+    // Throw issue not found error.
+    res.respond({});
+    return;
+  }
+
+  const issue = await findEntityOrThrow(Issue, issues[0].id, {
     relations: ['users', 'comments', 'comments.user'],
   });
   res.respond({ issue });
@@ -34,13 +42,29 @@ export const create = catchErrors(async (req, res) => {
 });
 
 export const update = catchErrors(async (req, res) => {
-  const issue = await updateEntity(Issue, req.params.issueId, req.body);
+  const issues = await Issue.find({ key: req.params.issueKey });
+
+  if (!issues || !issues[0]) {
+    // Throw issue not found error.
+    res.respond({});
+    return;
+  }
+
+  const issue = await updateEntity(Issue, issues[0].id, req.body);
   res.respond({ issue });
 });
 
 export const remove = catchErrors(async (req, res) => {
-  const issue = await deleteEntity(Issue, req.params.issueId);
-  res.respond({ issue });
+  const issue = await Issue.find({ key: req.params.issueKey });
+
+  if (!issue || !issue[0]) {
+    // Throw issue not found error.
+    res.respond({});
+    return;
+  }
+
+  const issueToDelete = await deleteEntity(Issue, issue[0].id);
+  res.respond({ issueToDelete });
 });
 
 const calculateListPosition = async ({ projectId, status }: Issue): Promise<number> => {

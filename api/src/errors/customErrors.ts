@@ -36,3 +36,9 @@ export class InvalidTokenError extends CustomError {
     super(message, 'INVALID_TOKEN', 401);
   }
 }
+
+export class InvalidPassword extends CustomError {
+  constructor(message = 'The password provided does not meet the criteria.') {
+    super(message, 'INVALID_PASSWORD', 401);
+  }
+}

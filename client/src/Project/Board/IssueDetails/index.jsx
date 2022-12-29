@@ -49,7 +49,7 @@ const ProjectBoardIssueDetails = ({
       currentFields: issue,
       setLocalData: fields => {
         updateLocalIssueDetails(fields);
-        updateLocalProjectIssues(issue.id, fields);
+        updateLocalProjectIssues(issue.key, fields);
       },
     });
   };
