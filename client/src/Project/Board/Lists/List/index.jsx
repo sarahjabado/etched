@@ -54,7 +54,7 @@ const filterIssues = (projectIssues, filters, currentUserId) => {
   let issues = projectIssues;
 
   if (searchTerm) {
-    issues = issues.filter(issue => issue.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    issues = issues.filter(issue => issue.title.toLowerCase().includes(searchTerm.toLowerCase()) || issue.key.toLowerCase().includes(searchTerm.toLowerCase()));
   }
   if (userIds.length > 0) {
     issues = issues.filter(issue => intersection(issue.userIds, userIds).length > 0);

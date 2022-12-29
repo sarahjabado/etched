@@ -45,8 +45,8 @@ class Comment extends BaseEntity {
   )
   issue: Issue;
 
-  @Column('integer')
-  issueId: number;
+  @Column('varchar')
+  issueId: string;
 }
 
 export default Comment;

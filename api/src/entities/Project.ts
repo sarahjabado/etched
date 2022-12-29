@@ -29,6 +29,9 @@ class Project extends BaseEntity {
   @Column('varchar', { nullable: true })
   url: string | null;
 
+  @Column('varchar', { nullable: true })
+  key: string;
+
   @Column('text', { nullable: true })
   description: string | null;
 
@@ -40,6 +43,9 @@ class Project extends BaseEntity {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @Column('integer', { default: 0 })
+  issuesCount: number;
 
   @OneToMany(
     () => Issue,

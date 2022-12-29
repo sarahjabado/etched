@@ -10,7 +10,7 @@ import ProTip from './ProTip';
 import { Create, UserAvatar, Right, FakeTextarea } from './Styles';
 
 const propTypes = {
-  issueId: PropTypes.number.isRequired,
+  issueId: PropTypes.string.isRequired,
   fetchIssue: PropTypes.func.isRequired,
 };
 

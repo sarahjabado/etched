@@ -13,6 +13,7 @@ import {
   RelationId,
   BeforeUpdate,
   BeforeInsert,
+  // AfterInsert,
 } from 'typeorm';
 
 import is from 'utils/validation';
@@ -30,8 +31,11 @@ class Issue extends BaseEntity {
     reporterId: is.required(),
   };
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Column('varchar', { unique: true })
+  key: string;
 
   @Column('varchar')
   title: string;
@@ -104,6 +108,48 @@ class Issue extends BaseEntity {
       this.descriptionText = striptags(this.description);
     }
   };
+
+  @BeforeInsert()
+  setProject = async (): Promise<void> => {
+    if (!this.project && this.projectId) {
+      const project = await Project.findOneOrFail(this.projectId);
+      if (!project) {
+        //Throw error.
+        return;
+      }
+
+      this.project = project;
+    }
+  }
+
+  async getProject(): Promise<Project> {
+    if (this.project) {
+      return this.project;
+    }
+
+    if (!this.projectId) {
+      throw 'No project exists';
+    }
+
+    const project = await Project.findOneOrFail(this.projectId);
+    if (!project) {
+      // Throw.
+      throw 'No project exists';
+    }
+    return project;
+  }
+
+  @BeforeInsert()
+  setIssueKey = async (): Promise<void> => {
+    const project = await this.getProject();
+    project.issuesCount++;
+
+    project.save();
+
+    if (!this.key) {
+      this.key = `${project.key}-${project.issuesCount}`;
+    }
+  }
 }
 
 export default Issue;
