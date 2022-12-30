@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import api from 'shared/utils/api';
 import toast from 'shared/utils/toast';
 import { formatDateTimeConversational } from 'shared/utils/dateTime';
-import { ConfirmModal } from 'shared/components';
+import { ConfirmModal, TextEditedContent } from 'shared/components';
 
 import BodyForm from '../BodyForm';
 import {
@@ -66,7 +66,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
           />
         ) : (
           <Fragment>
-            <Body>{comment.body}</Body>
+            <TextEditedContent content={comment.body} />
             <EditLink onClick={() => setFormOpen(true)}>Edit</EditLink>
             <ConfirmModal
               title="Are you sure you want to delete this comment?"
