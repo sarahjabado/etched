@@ -33,7 +33,7 @@ const seedUsers = (): Promise<User[]> => {
 const seedProject = (users: User[]): Promise<Project> =>
   createEntity(Project, {
     name: 'Example Project',
-    url: '/',
+    url: 'https://devloaf.io/',
     description:
       'Plan, track, and manage your agile and software development projects in Etched. Customize your workflow, collaborate, and release great software.',
     category: ProjectCategory.SOFTWARE,
