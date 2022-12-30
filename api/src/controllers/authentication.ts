@@ -22,7 +22,6 @@ export const doLogin = catchErrors(async (req, res): Promise<void> => {
   }
 
   if (!username || !password) {
-    console.log('Missing request body.');
     failResponse();
 
     return;
@@ -31,7 +30,6 @@ export const doLogin = catchErrors(async (req, res): Promise<void> => {
   const user = await User.isValidLogin(username, password);
 
   if (!user) {
-    console.log('isValidLogin failed');
     failResponse();
 
     return;
