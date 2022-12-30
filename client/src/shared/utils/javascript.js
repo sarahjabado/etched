@@ -11,9 +11,9 @@ export const insertItemIntoArray = (arr, item, index) => {
   return arrClone;
 };
 
-export const updateArrayItemById = (arr, itemId, fields) => {
+export const updateArrayItemByKey = (arr, itemId, fields) => {
   const arrClone = [...arr];
-  const item = arrClone.find(({ id }) => id === itemId);
+  const item = arrClone.find(({ key }) => key === itemId);
   if (item) {
     const itemIndex = arrClone.indexOf(item);
     arrClone.splice(itemIndex, 1, { ...item, ...fields });

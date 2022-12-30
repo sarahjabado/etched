@@ -79,8 +79,6 @@ class User extends BaseEntity {
   async setUserPasswordOnCreate(): Promise<void> {
     const pass = this.password || Cryptgen.random(16);
 
-    console.log('Setting user password to', pass);
-
     this.setPassword(pass);
   }
 
@@ -104,8 +102,6 @@ class User extends BaseEntity {
       const val = await User.createQueryBuilder('user')
         .select('encode(sha512(\'' + newPassword + this.salt + '\'::bytea), \'hex\')')
         .getRawOne();
-
-      console.log('Value of Val', val, 'on', this);
 
       this.password = val.encode;
       this.save();

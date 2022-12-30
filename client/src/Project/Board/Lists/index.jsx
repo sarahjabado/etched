@@ -22,14 +22,14 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
   const handleIssueDrop = ({ draggableId, destination, source }) => {
     if (!isPositionChanged(source, destination)) return;
 
-    const issueId = Number(draggableId);
+    const issueId = draggableId;
 
     api.optimisticUpdate(`/issues/${issueId}`, {
       updatedFields: {
         status: destination.droppableId,
         listPosition: calculateIssueListPosition(project.issues, destination, source, issueId),
       },
-      currentFields: project.issues.find(({ id }) => id === issueId),
+      currentFields: project.issues.find(({ key }) => key === issueId),
       setLocalData: fields => updateLocalProjectIssues(issueId, fields),
     });
   };
@@ -76,7 +76,7 @@ const calculateIssueListPosition = (...args) => {
 
 const getAfterDropPrevNextIssue = (allIssues, destination, source, droppedIssueId) => {
   const beforeDropDestinationIssues = getSortedListIssues(allIssues, destination.droppableId);
-  const droppedIssue = allIssues.find(issue => issue.id === droppedIssueId);
+  const droppedIssue = allIssues.find(issue => issue.key === droppedIssueId);
   const isSameList = destination.droppableId === source.droppableId;
 
   const afterDropDestinationIssues = isSameList
