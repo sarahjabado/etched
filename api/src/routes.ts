@@ -4,6 +4,7 @@ import * as issues from 'controllers/issues';
 import * as projects from 'controllers/projects';
 import * as test from 'controllers/test';
 import * as users from 'controllers/users';
+import * as files from 'controllers/files';
 
 export const attachPublicRoutes = (app: any): void => {
   if (process.env.NODE_ENV === 'test') {
@@ -16,18 +17,26 @@ export const attachPublicRoutes = (app: any): void => {
 };
 
 export const attachPrivateRoutes = (app: any): void => {
+  // Comments
   app.post('/comments', comments.create);
   app.put('/comments/:commentId', comments.update);
   app.delete('/comments/:commentId', comments.remove);
 
+  // Issues
   app.get('/issues', issues.getProjectIssues);
   app.get('/issues/:issueKey', issues.getIssueWithUsersAndComments);
   app.post('/issues', issues.create);
   app.put('/issues/:issueKey', issues.update);
   app.delete('/issues/:issueKey', issues.remove);
 
+  // Projects
   app.get('/project', projects.getProjectWithUsersAndIssues);
   app.put('/project', projects.update);
 
+  // User
   app.get('/currentUser', users.getCurrentUser);
+
+  // Files
+  app.put('/attachments/new', files.signedUpload);
+  app.post('/attachments/retrieve', files.signedDownload);
 };
