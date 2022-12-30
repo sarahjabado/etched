@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Redirect, useRouteMatch, useHistory } from 'react-router-dom';
 
 import useApi from 'shared/hooks/api';
-import { updateArrayItemById } from 'shared/utils/javascript';
+import { updateArrayItemByKey } from 'shared/utils/javascript';
 import { createQueryParamModalHelpers } from 'shared/utils/queryParamModal';
 import { PageLoader, PageError, Modal } from 'shared/components';
 
@@ -32,7 +32,7 @@ const Project = () => {
     setLocalData(currentData => ({
       project: {
         ...currentData.project,
-        issues: updateArrayItemById(currentData.project.issues, issueId, updatedFields),
+        issues: updateArrayItemByKey(currentData.project.issues, issueId, updatedFields),
       },
     }));
   };

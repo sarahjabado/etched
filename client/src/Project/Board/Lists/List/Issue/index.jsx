@@ -19,7 +19,7 @@ const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
   const assignees = issue.userIds.map(userId => projectUsers.find(user => user.id === userId));
 
   return (
-    <Draggable draggableId={issue.id.toString()} index={index}>
+    <Draggable draggableId={issue.key} index={index}>
       {(provided, snapshot) => (
         <IssueLink
           to={`${match.url}/issues/${issue.key}`}
