@@ -13,9 +13,24 @@ services:
       context: ../
       dockerfile: ./docker/App/Dockerfile
     volumes:
-      - ../:/app:rw
+      - ../client/:/app:rw
     ports:
       - '8080:8080'
+    depends_on:
+      sql:
+        condition: service_started
+      api:
+        condition: service_started
+    links:
+      - sql
+      - api
+  api:
+    build:
+      context: ../
+      dockerfile: ./docker/Api/Dockerfile
+    volumes:
+      - ../api/:/app:rw
+    ports:
       - '3000:3000'
     depends_on:
       sql:

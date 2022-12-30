@@ -12,7 +12,7 @@ RUN source ~/.profile
 RUN nvm install 12.19.0
 RUN nvm use 12.19.0
 RUN npm --version
-COPY ./client /app
+COPY ./api /app
 COPY ./docker/start.sh /etc/start.sh
 RUN chmod +x /etc/start.sh
 RUN cd /app && npm ci
